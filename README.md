@@ -92,8 +92,9 @@ The only header needed resides in [locking_container.hpp](include/locking_contai
 using stl_container_type = std::vector<int>;
 burda::locking_container<stl_container_type> locking_container = { 1, 2, 3 };
 
-// note that more that one usage of these locking functions in a row is not optimal from the performance viewpoint,
-// since it obtains lock multiple times; in this case it's better to use "read_lock(...)", resp. "write_block(...)"
+// note that more that one usage of these locking functions in a row is not optimal
+// from the performance viewpoint, since it obtains lock multiple times; in this case
+// it's better to use "read_lock(...)", resp. "write_block(...)"
 safe_container.emplace_back_write_lock(4);
 safe_container.emplace_back_write_lock(99);
 
@@ -101,8 +102,7 @@ safe_container.emplace_back_write_lock(99);
 safe_container.insert(std::end(safe_container), 5);
 
 const auto size = safe_container.size_safe();
-
-// note that this us equivalent of the following (can use functionality from the "locking_container_basic"):
+// previous this is equivalent of the following (can use functionality from the "locking_container_basic"):
 // safe_container.read_lock([&]()
 // {
 //     safe_container.size();
@@ -141,7 +141,7 @@ target_link_libraries(my-project locking_container)
 ```
 
 #### B) Generate separately
-Generation phase on the ts-container is run separately, that means that you run:
+Generation phase on the locking-container is run separately, that means that you run:
 ```cmake
 cmake <path-to-locking-container>
 # example: cmake -Bbuild/locking-container -Hlocking-container in the root of your project 
@@ -155,7 +155,7 @@ Then you can do this in your `CMakeLists.txt`:
 add_executable(my-project main.cpp)
 
 find_package(locking_container CONFIG PATHS <path-to-binary-dir-of-locking-container>)
-# alternatively assuming that the "ts_container_DIR" variable is set: find_package(ts-container CONFIG)
+# alternatively assuming that the "locking_container_DIR" variable is set: find_package(locking-container CONFIG)
 
 # you can also query (or force specific version during the previous "find_package()" call)
 message(STATUS "Found version of locking-container is: ${locking_container_VERSION}")
@@ -175,31 +175,13 @@ You also have to use at least C++ 14 standard.
 ## Implementation
 The container itself is implemented with the help of pre-processor macros and `auto` type deduction for return codes and arguments.
 
-The main class is implemented in the following manner/pseudo-code:
-
-```cpp
-template<typename T>
-class ts_container : public T
-{
-public:
-    <implemented rule of five>
-
-    <pre-processor generated list of methods providing locked calls to parent container>
-    
-    <implemented operator[]>
-    
-    <implemented begin(...), cbegin(...), end(...), cend(...) and their thread unsafe variants>
-
-private:
-    <mutual exclusion primitive>    
-};
-```
-
 Classes are implemented at the [locking_container_basic.hpp](include/locking_container/locking_container_basic.hpp)
 and [locking_container.hpp](include/locking_container/locking_container.hpp).
 
 `locking_container_basic` inherits from `T` where the T might be `std::vector<std::string, my_custom_allocator>`, or `std::unordered_map<int, int, custom_hash, custom_key_comparator>`,
 or whichever valid STL container with valid template arguments.
+
+`locking_container` is child of the `locking_container_basic`.
 
 Pre-processor macros are used in order to generator all locking versions of original STL methods, see [macros.hpp](include/locking_container/detail/macros.hpp).
 
