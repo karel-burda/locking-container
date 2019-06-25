@@ -166,7 +166,7 @@ find_package(locking_container CONFIG PATHS <path-to-binary-dir-of-locking-conta
 # you can also query (or force specific version during the previous "find_package()" call)
 message(STATUS "Found version of locking-container is: ${locking_container_VERSION}")
 
-# this will import search paths, compile definitions and other settings of the package as well
+# this will import search paths, compile definitions and others of the package as well
 target_link_libraries(my-project burda::locking_container)
 # or with public visibility: target_link_libraries(my-project PUBLIC burda::locking_container)
 ```
