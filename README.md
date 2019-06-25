@@ -1,6 +1,6 @@
 ![Version](https://img.shields.io/badge/version-0.9.0-blue.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-blue.svg?style=flat)](LICENSE)
-[![Build Status](https://travis-ci.org/karel-burda/ts-container.svg?branch=develop)](https://travis-ci.org/karel-burda/ts-container)
+[![Build Status](https://travis-ci.com/karel-burda/locking-container.svg?branch=master)](https://travis-ci.com/karel-burda/locking-container)
 
 ## Important
 This project contains git sub-modules that are needed for building example and tests.
@@ -102,7 +102,7 @@ safe_container.emplace_back_write_lock(99);
 safe_container.insert(std::end(safe_container), 5);
 
 const auto size = safe_container.size_safe();
-// previous this is equivalent of the following (can use functionality from the "locking_container_basic"):
+// equivalent of the following (can use functionality from the "locking_container_basic"):
 // safe_container.read_lock([&]()
 // {
 //     safe_container.size();
@@ -207,7 +207,7 @@ This is the example of running tests in the debug mode.
 For more info, see [.travis.yml](.travis.yml).
 
 ## Continuous Integration
-Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.org/karel-burda/ts-container.
+Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.com/karel-burda/locking-container.
 
 Compilers are set-up with pedantic warning level.
 Targets are built in one stage with debug symbols with code coverage measure and in release mode with debug symbols in the second one.

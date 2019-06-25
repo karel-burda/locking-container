@@ -3,7 +3,7 @@ git:
 
 matrix:
   include:
-     - name: "locked-container, tests -- linux, release with debug info, g++, 64-bit"
+     - name: "locking-container, tests -- linux, release with debug info, g++, 64-bit"
        os: linux
        dist: xenial
        language: cpp
@@ -30,7 +30,26 @@ matrix:
 
          - set +e
 
-     - name: "locked-container, tests -- windows, release, msvc, 32-bit"
+     - name: "locking-container tests -- osx, release with debug info, clang++, 64-bit"
+       os: osx
+       osx_image: xcode10.1
+       language: cpp
+       env: BUILD_TYPE="RelWithDebInfo"
+       compiler: clang++
+       script:
+         - set -e
+
+         - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build --config $BUILD_TYPE
+
+         - cmake -Bbuild/tests/unit -Htests/unit
+                 -Dts_container_DIR:PATH=$(pwd)/build
+                 -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE -- -j $(nproc)
+
+         - set +e
+
+     - name: "locking-container, tests -- windows, release, msvc, 32-bit"
        os: windows
        language: cpp
        env: BUILD_TYPE="Release"
