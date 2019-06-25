@@ -7,7 +7,8 @@ namespace burda
 namespace stl
 {
 /**
- * Implements thread-safe variants (as new methods) of all containers' methods, list available at: https://en.cppreference.com/w/cpp/container
+ * Implements thread-safe variants (as new methods) of all containers' methods,
+ * list available at: https://en.cppreference.com/w/cpp/container
  * @see "locking_container_basic"
  */
 template <typename T>
