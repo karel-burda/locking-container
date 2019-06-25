@@ -140,7 +140,7 @@ message(STATUS "Current version of the locking_container is: ${locking_container
 
 add_library(burda::locking_container ALIAS locking_container)
 
-# this will import search paths, compile definitions and other settings of the locking_container as well
+# this will import search paths, compile definitions and others of the locking_container as well
 target_link_libraries(my-project locking_container)
 # or with private visibility: target_link_libraries(my-project PRIVATE locking_container)
 ```
