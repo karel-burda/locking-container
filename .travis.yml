@@ -24,7 +24,7 @@ matrix:
          - cmake --build build --config $BUILD_TYPE
 
          - cmake -Bbuild/tests/unit -Htests/unit
-                 -Dts_container_DIR:PATH=$(pwd)/build
+                 -Dlocking_container_DIR:PATH=$(pwd)/build
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE -- -j $(nproc)
 
@@ -43,7 +43,7 @@ matrix:
          - cmake --build build --config $BUILD_TYPE
 
          - cmake -Bbuild/tests/unit -Htests/unit
-                 -Dts_container_DIR:PATH=$(pwd)/build
+                 -Dlocking_container_DIR:PATH=$(pwd)/build
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE -- -j $(nproc)
 
@@ -60,7 +60,7 @@ matrix:
          - cmake --build build --config $BUILD_TYPE
 
          - cmake -Bbuild/tests/unit -Htests/unit
-                 -Dts_container_DIR:PATH=$(pwd)/build
+                 -Dlocking_container_DIR:PATH=$(pwd)/build
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE
 
