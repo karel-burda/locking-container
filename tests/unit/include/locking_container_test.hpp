@@ -1,8 +1,10 @@
 #include <deque>
 #include <forward_list>
 #include <iterator>
+#include <stack>
 #include <type_traits>
 #include <vector>
+#include <queue>
 
 #include <gtest/gtest.h>
 
@@ -62,6 +64,18 @@ void test_element_access(const T & instance)
     }
 }
 
+template <typename T, typename U>
+void test_modifiers(T & instance)
+{
+    if constexpr (!std::is_base_of<std::array<U, 0>, T>::value &&
+                  !std::is_base_of<std::stack<U>, T>::value &&
+                  !std::is_base_of<std::queue<U>, T>::value &&
+                  !std::is_base_of<std::priority_queue<U>, T>::value)
+    {
+        EXPECT_NO_THROW(instance.clear_write_lock());
+    }
+}
+
 template <typename T>
 void test_operators(const T & instance, const size_t size)
 {
@@ -97,6 +111,7 @@ void create_and_test_container_methods()
         test_capacity<decltype(empty_instance), type_base>(empty_instance);
         test_iterators<decltype(empty_instance), type_base>(empty_instance);
         test_element_access<decltype(empty_instance), type_base>(empty_instance);
+        test_modifiers<decltype(empty_instance), type_base>(empty_instance);
         test_callbacks(empty_instance);
     }
 
