@@ -215,6 +215,6 @@ For more info, see [.travis.yml](.travis.yml).
 Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.com/karel-burda/locking-container.
 
 The project is using these jobs:
-  * `timers, example, tests -- linux, release with debug info, g++, 64-bit`
-  * `timers, example, tests -- osx, release with debug info, clang++, 64-bit`
-  * `timers, example, tests -- windows, release, msvc, 32-bit`
+  * `locking-container, tests -- linux, release with debug info, g++, 64-bit`
+  * `locking-container, tests -- osx, release with debug info, clang++, 64-bit`
+  * `locking-container, tests -- windows, release, msvc, 32-bit`
