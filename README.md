@@ -22,7 +22,7 @@ and implements additional methods.
 The thread-safety is implemented using either `std::shared_timed_mutex` (in case when C++14 used) or `std::shared_mutex` (in case of C++17 and higher).
 The read-only methods uses the read-lock (`std::shared_lock<T>` on the mutex), the "writers" ones use the `std::unique_lock<T>`.
 
-There are these main classes:
+**There are these main classes:**
 ### `locking_container_basic`
 `locking_container_basic` provides methods to run certain block of code (e.g. via lambdas) with read, resp. write, lock:
   * `read_lock(T && t)`
@@ -40,7 +40,7 @@ Implemented at the [locked_container_basic.hpp](include/locking_container/lockin
 using stl_container_type = std::vector<int>;
 burda::stl::locking_container_basic<stl_container_type> locking_container = { 1, 2, 3 };
 
-// runs in the one block so that the lock itself in the locking_container is used only once
+// the lock itself in the locking_container_basic is used only once
 locking_container.write_lock([&]()
 {
     // following code runs under the "write" lock, this means that it waits until all "readers"
@@ -49,7 +49,7 @@ locking_container.write_lock([&]()
     locking_container.emplace_back(5);
 });
 
-// or use function binding instead of lambda...
+// instead of lambda, we could also use binding...
 locking_container.read_lock([&]()
 {
     // runs under the shared "read" lock, so that there might be multiple concurrent readers, and this
@@ -59,10 +59,10 @@ locking_container.read_lock([&]()
 });
 ```  
 ### `locking_container`
-The class inherits from the above `locking_container_basic` and implements additional locking variants to all STL containers.
+The class inherits from the above described `locking_container_basic` and implements additional locking variants to all STL containers' methods.
  
-This results in implementing each of the container's method variant with the `_lock` suffix.
-So for the `std::vector<...>`, we have these:
+This results in implementing each of the container's method variant in a locking manner; the method is named with the `_lock` suffix.
+So, for the `std::vector<...>`, we have these:
   * `emplace_back_write_lock(...)`
   * `size_read_lock(...)`
   * `capacity_read_lock(...)`
@@ -77,7 +77,7 @@ In addition to these existing:
 So it always adds the `*(read | write)_lock` variant to existing original container's methods. However, the locking versions cannot grant `noexcept` specifier because
 of the mutex primitive. 
 
-When using the traditional lock-free methods, there's absolutely no additional overhead, because the base classes' (the STL container itself) implementation is called.
+When using the traditional lock-free methods, there's absolutely no additional overhead, because the base class (the STL container itself) implementation is called.
 
 The are these **important** facts when it comes to usage:
   * `operator[]` is implemented with the read-write lock, so it is always thread-safe and there's no lock-free version provided
@@ -97,7 +97,7 @@ burda::locking_container<stl_container_type> locking_container = { 1, 2, 3 };
 
 // note that more that one call of these locking functions in a row is not optimal
 // from the performance viewpoint, since it obtains lock multiple times; in this case
-// it's better to use "read_lock(...)", resp. "write_block(...)"
+// it's better to use "read_lock(...)", resp. "write_lock(...)"
 locking_container.emplace_back_write_lock(4);
 locking_container.emplace_back_write_lock(99);
 
@@ -105,7 +105,7 @@ locking_container.emplace_back_write_lock(99);
 locking_container.insert(std::end(safe_container), 5);
 
 const auto size = locking_container.size_safe();
-// equivalent of the following (can use functionality from the parent):
+// above is equivalent of the following:
 // locking_container.read_lock([&]()
 // {
 //     locking_container.size();
@@ -116,7 +116,7 @@ const auto size = locking_container.size_safe();
 For full use cases, see implementation of unit tests at [tests/unit](tests/unit).
 
 ## Integration
-Implementation resides in the `burda::stl::locking_container` namespace, so it might be useful to do something like
+Implementation resides in the `burda::stl` namespace, so it might be useful to do something like
 `using locked_container = burda::stl::locked_container` in your project.
 
 Include `#include <locking_container/locking_container.hpp>` or just `#include <locking_container/locking_container_basic.hpp>` for the basic version.
@@ -188,11 +188,10 @@ and [locking_container.hpp](include/locking_container/locking_container.hpp).
 or whichever valid STL container with valid template arguments.
 
 `locking_container` is child of the `locking_container_basic`.
-
-Pre-processor macros are used in order to generator all locking versions of original STL methods, see [macros.hpp](include/locking_container/detail/macros.hpp).
+Pre-processor macros are used in order to generate all locking versions of original STL methods, see [macros.hpp](include/locking_container/detail/macros.hpp).
 
 ## Unit Tests
-Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers).
+Tests require sub-module [cmake-helpers](https://github.com/karel-burda/cmake-helpers).
 
 For building tests, run CMake in the source directory [tests/unit](tests/unit):
 
@@ -214,9 +213,6 @@ For more info, see [.travis.yml](.travis.yml).
 
 ## Continuous Integration
 Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.com/karel-burda/locking-container.
-
-Compilers are set-up with pedantic warning level.
-Targets are built in one stage with debug symbols with code coverage measure and in release mode with debug symbols in the second one.
 
 The project is using these jobs:
   * `timers, example, tests -- linux, release with debug info, g++, 64-bit`
