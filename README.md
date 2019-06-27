@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.9.1-blue.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-blue.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.com/karel-burda/locking-container.svg?branch=develop)](https://travis-ci.com/karel-burda/locking-container)
 
@@ -36,6 +36,8 @@ Implemented at the [locked_container_basic.hpp](include/locking_container/lockin
 > Principle is applicable for any other STL container such as `std::map`, `std::forward_iterator`, and others
 
 ```cpp
+#include <locking_container/locking_container_basic.hpp>
+
 // use custom allocator or whichever template arguments the container supports
 using stl_container_type = std::vector<int>;
 burda::stl::locking_container_basic<stl_container_type> locking_container = { 1, 2, 3 };
@@ -91,9 +93,11 @@ The only header needed resides in [locking_container.hpp](include/locking_contai
 > Principle is applicable for any other STL container such as `std::map`, `std::forward_iterator`, and others
 
 ```cpp
+#include <locking_container/locking_container.hpp>
+
 // use custom allocator or whichever template arguments the container supports
 using stl_container_type = std::vector<int>;
-burda::locking_container<stl_container_type> locking_container = { 1, 2, 3 };
+burda::stl::locking_container<stl_container_type> locking_container = { 1, 2, 3 };
 
 // note that more that one call of these locking functions in a row is not optimal
 // from the performance viewpoint, since it obtains lock multiple times; in this case
@@ -102,24 +106,32 @@ locking_container.emplace_back_write_lock(4);
 locking_container.emplace_back_write_lock(99);
 
 // can call original original STL container lock-free methods as well
-locking_container.insert(std::end(safe_container), 5);
+locking_container.insert(std::end(locking_container), 5);
 
-const auto size = locking_container.size_safe();
+const auto size = locking_container.size_read_lock();
 // above is equivalent of the following:
 // locking_container.read_lock([&]()
 // {
 //     locking_container.size();
 // });
-}
 ```
 
 For full use cases, see implementation of unit tests at [tests/unit](tests/unit).
 
 ## Integration
-Implementation resides in the `burda::stl` namespace, so it might be useful to do something like
-`using locked_container = burda::stl::locked_container` in your project.
+There are two possible headers for inclusion:
+```cpp
+#include <locking_container/locking_container_basic.hpp>
 
-Include `#include <locking_container/locking_container.hpp>` or just `#include <locking_container/locking_container_basic.hpp>` for the basic version.
+// or extended version that implements "*_lock" version to every STL method
+#include <locking_container/locking_container.hpp> 
+```
+
+Implementation resides in the `burda::stl` namespace, so it might be useful to do something like this in your project:
+```cpp
+template <typename T>
+using locking_container = burda::stl::locking_container<T>;
+```
 
 ### 1. CMake Way
 Recommended option.
