@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
-project(locking_container VERSION 0.9.0 LANGUAGES CXX)
+project(locking_container VERSION 0.9.1 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)
 
