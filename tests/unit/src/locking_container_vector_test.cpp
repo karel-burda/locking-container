@@ -1,5 +1,4 @@
 #include <chrono>
-#include <cstdlib>
 #include <future>
 #include <thread>
 #include <vector>
