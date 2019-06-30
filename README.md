@@ -14,7 +14,7 @@ in addition to the existing ones.
  
 It works with all containers from the [STL](https://en.cppreference.com/w/cpp/container).
  
-The [read-write lock principle](https://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) is used where there might be multiple concurrent readers, but at maximum one writer, is achieved using `std::shared_mutex` (or `std::shared_timed_mutex`) is used.
+The [read-write lock principle](https://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) is used, where there might be multiple concurrent readers, but at maximum one writer, is achieved using `std::shared_mutex` (or `std::shared_timed_mutex`) is used.
 
 It simply inherits from the given STL container (be it `std::vector`, `std::forward_list`, `std::unordered_map` with custom hash function and allocators, etc.)
 and implements additional methods.
@@ -30,7 +30,7 @@ The read-only methods uses the read-lock (`std::shared_lock<T>` on the mutex), t
   
 `locking_container_basic` is not copy-able nor move-able due to the mutex contained within the class.  
 
-Implemented at the [locked_container_basic.hpp](include/locking_container/locking_container_basic.hpp).
+Implemented at the [locking_container_basic.hpp](include/locking_container/locking_container_basic.hpp).
 
 #### Example  
 > Principle is applicable for any other STL container such as `std::map`, `std::forward_iterator`, and others
