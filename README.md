@@ -25,8 +25,8 @@ The read-only methods uses the read-lock (`std::shared_lock<T>` on the mutex), t
 **There are these main classes:**
 ### `locking_container_basic`
 `locking_container_basic` provides methods to run certain block of code (e.g. via lambdas) with read, resp. write, lock:
-  * `read_lock(T && t)`
-  * `write_lock(T && t)`
+  * `read_lock(T && action)`
+  * `write_lock(T && action)`
   
 `locking_container_basic` is not copy-able nor move-able due to the mutex contained within the class.  
 
